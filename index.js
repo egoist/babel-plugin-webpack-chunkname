@@ -2,6 +2,11 @@ const trimChunkName = baseDir => {
   return baseDir.replace(/^[./]+|(\.js$)/g, '')
 }
 
+function hasMagicComment(node) {
+  const { leadingComments } = node
+  return leadingComments && leadingComments.length > 0 && leadingComments[0].value.indexOf('webpackChunkName') >= 0
+}
+
 function getMagicCommentChunkName(importArgNode) {
   const { quasis, expressions } = importArgNode
 
@@ -21,6 +26,8 @@ module.exports = function () {
       CallExpression(path) {
         if (path.node.callee.type === 'Import') {
           const arg = path.get('arguments')[0]
+          if (hasMagicComment(arg.node)) return
+
           arg.addComment('leading', ` webpackChunkName: '${getMagicCommentChunkName(arg.node)}' `)
         }
       }
