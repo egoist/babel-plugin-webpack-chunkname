@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-webpack-chunkname",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Automatically set the chunkname for dynamic imports",
   "repository": {
     "url": "egoist/babel-plugin-webpack-chunkname",
