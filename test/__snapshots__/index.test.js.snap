@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`main 1`] = `
+"import( /* webpackChunkName: 'foo' */'foo');
+import( /* webpackChunkName: 'foo' */'./foo.js');
+import( /* webpackChunkName: 'foo/[request]' */\`./foo/\${bar}\`);"
+`;
