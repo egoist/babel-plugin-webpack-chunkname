@@ -22,6 +22,16 @@ test('skip exising magic comment', () => {
   expect(code).toMatchSnapshot()
 })
 
+test('replace exising magic comment', () => {
+  const { code } = babel.transform(`import(/* webpackChunkName: '__CHUNK_NAME__' */'./foo')`, {
+    plugins: [
+      'syntax-dynamic-import',
+      plugin
+    ]
+  })
+  expect(code).toMatchSnapshot()
+})
+
 test('custom', () => {
   const { code } = babel.transform(`import('./foo/bar')`, {
     plugins: [

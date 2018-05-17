@@ -18,6 +18,12 @@ import(
 \`./foo/\${bar}\`);"
 `;
 
+exports[`replace exising magic comment 1`] = `
+"import(
+/* webpackChunkName: 'foo' */
+'./foo');"
+`;
+
 exports[`skip exising magic comment 1`] = `
 "import(
 /* webpackChunkName: 'existing' */

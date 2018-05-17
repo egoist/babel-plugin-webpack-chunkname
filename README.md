@@ -41,6 +41,16 @@ import(`./pages/${name}`)
 import( /* webpackChunkName: 'pages/[request]' */`./pages/${name}`)
 ```
 
+Or using placeholder:
+
+```js
+import(/* webpackChunkName: "__CHUNK_NAME__" */ `./foo`)
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import(/* webpackChunkName: "foo" */ `./foo`)
+```
+
 ## Options
 
 #### getChunkName

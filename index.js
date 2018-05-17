@@ -4,7 +4,16 @@ const trimChunkName = baseDir => {
 
 function hasMagicComment(node) {
   const { leadingComments } = node
-  return leadingComments && leadingComments.length > 0 && leadingComments[0].value.indexOf('webpackChunkName') >= 0
+  return (
+    leadingComments &&
+    leadingComments.length > 0 &&
+    leadingComments[0].value.indexOf('webpackChunkName') >= 0
+  )
+}
+
+function replaceMagicComment(comments, chunkName) {
+  comments[0].value = comments[0].value.replace('__CHUNK_NAME__', chunkName)
+  return comments
 }
 
 function getMagicCommentChunkName(importArgNode, getChunkName) {
@@ -26,9 +35,20 @@ module.exports = function () {
       CallExpression(path, { opts: { getChunkName = trimChunkName } }) {
         if (path.node.callee.type === 'Import') {
           const arg = path.get('arguments')[0]
-          if (hasMagicComment(arg.node)) return
-
-          arg.addComment('leading', ` webpackChunkName: '${getMagicCommentChunkName(arg.node, getChunkName)}' `)
+          if (hasMagicComment(arg.node)) {
+            arg.node.leadingComments = replaceMagicComment(
+              arg.node.leadingComments,
+              getMagicCommentChunkName(arg.node, getChunkName)
+            )
+          } else {
+            arg.addComment(
+              'leading',
+              ` webpackChunkName: '${getMagicCommentChunkName(
+                arg.node,
+                getChunkName
+              )}' `
+            )
+          }
         }
       }
     }
