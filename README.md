@@ -41,6 +41,13 @@ import(`./pages/${name}`)
 import( /* webpackChunkName: 'pages/[request]' */`./pages/${name}`)
 ```
 
+## Options
+
+#### getChunkName
+
+- __Type__: `(imported: string) => string`
+- __Default__: `imported => imported.replace(/^[./]+|(\.js$)/g, '')`
+
 ## Contributing
 
 1. Fork it!

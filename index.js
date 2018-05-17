@@ -7,15 +7,15 @@ function hasMagicComment(node) {
   return leadingComments && leadingComments.length > 0 && leadingComments[0].value.indexOf('webpackChunkName') >= 0
 }
 
-function getMagicCommentChunkName(importArgNode) {
+function getMagicCommentChunkName(importArgNode, getChunkName) {
   const { quasis, expressions } = importArgNode
 
-  if (!quasis) return trimChunkName(importArgNode.value)
+  if (!quasis) return getChunkName(importArgNode.value)
 
   const baseDir = quasis[0].value.cooked
   const hasExpressions = expressions.length > 0
   const chunkName = baseDir + (hasExpressions ? '[request]' : '')
-  return trimChunkName(chunkName)
+  return getChunkName(chunkName)
 }
 
 module.exports = function () {
@@ -23,12 +23,12 @@ module.exports = function () {
     name: 'webpack-chunkname',
 
     visitor: {
-      CallExpression(path) {
+      CallExpression(path, { opts: { getChunkName = trimChunkName } }) {
         if (path.node.callee.type === 'Import') {
           const arg = path.get('arguments')[0]
           if (hasMagicComment(arg.node)) return
 
-          arg.addComment('leading', ` webpackChunkName: '${getMagicCommentChunkName(arg.node)}' `)
+          arg.addComment('leading', ` webpackChunkName: '${getMagicCommentChunkName(arg.node, getChunkName)}' `)
         }
       }
     }

@@ -21,3 +21,17 @@ test('skip exising magic comment', () => {
   })
   expect(code).toMatchSnapshot()
 })
+
+test('custom', () => {
+  const { code } = babel.transform(`import('./foo/bar')`, {
+    plugins: [
+      'syntax-dynamic-import',
+      [plugin, {
+        getChunkName(name) {
+          return name.replace(/^\.\//, '').replace(/\//g, '-')
+        }
+      }]
+    ]
+  })
+  expect(code).toMatchSnapshot()
+})
